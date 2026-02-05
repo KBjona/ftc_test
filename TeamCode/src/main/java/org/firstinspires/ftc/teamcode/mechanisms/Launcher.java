@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     private final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
@@ -83,6 +85,7 @@ public class Launcher {
 
     public void startLauncher(double velocity, double minvelocity)
     {
+
         LAUNCHER_MIN_VELOCITY = minvelocity;
         LAUNCHER_TARGET_VELOCITY = velocity;
         if (launchState == LaunchState.IDLE)
@@ -101,5 +104,7 @@ public class Launcher {
     public double getVelocity() {return launcher.getVelocity(); }
 
     public void spinLauncher() {launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);}
+
+    public boolean isBusy() {return launcher.isBusy() || leftFeeder.getPower() != 0 || rightFeeder.getPower() != 0;}
 
 }

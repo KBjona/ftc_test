@@ -13,7 +13,7 @@ enum AutoStateMachine
     ROTATESERVO,
     SHOOT,
     LEAVE,
-    DONE;
+    DONE
 
 
 
@@ -34,45 +34,50 @@ public class FarAuto extends LinearOpMode {
         launcher.init(hardwareMap);
         servo = hardwareMap.get(Servo.class,"hood");
         balls = 3;
-        autostatemachine = AutoStateMachine.ROTATESERVO;
+        autostatemachine = AutoStateMachine.DONE;
 
         waitForStart();
+        Drive.init(hardwareMap);
+        launcher.init(hardwareMap);
+        servo = hardwareMap.get(Servo.class,"hood");
+        balls = 3;
+        autostatemachine = AutoStateMachine.ROTATESERVO;
         if (opModeIsActive())
         {
-            while (opModeIsActive())
-            {
-
-            switch (autostatemachine) {
-                case ROTATESERVO:
-                    telemetry.addLine("MOVINGSERVO");
-                    servo.setPosition(0.8);
-                    sleep(1000);
-                    autostatemachine = AutoStateMachine.SHOOT;
-                    break;
-                case SHOOT:
-                    if (balls > 0) {
-                        telemetry.addLine("shooting");
-                        launcher.startLauncher(2000,1900);
-                        balls--;
-                        sleep(5000);
-                    } else if (balls == 0) {
-                        telemetry.addLine("NOBALLS");
-                        autostatemachine = AutoStateMachine.LEAVE;
-                        sleep(1000);
+            while (opModeIsActive()) {
+                    switch (autostatemachine) {
+                        case ROTATESERVO:
+                            telemetry.addLine("MOVINGSERVO");
+                            servo.setPosition(0.75);
+                            sleep(1000);
+                            autostatemachine = AutoStateMachine.SHOOT;
+                            break;
+                        case SHOOT:
+                            if (balls > 0) {
+                                telemetry.addLine("shooting");
+                                launcher.startLauncher(2000, 1900);
+                                balls--;
+                                launcher.updateState();
+                                sleep(2000);
+                            } else if (balls == 0) {
+                                telemetry.addLine("NOBALLS");
+                                launcher.updateState();
+                                autostatemachine = AutoStateMachine.LEAVE;
+                                sleep(1000);
+                            }
+                            break;
+                        case LEAVE:
+                            telemetry.addLine("LEAVING");
+                            Drive.driveDistance(35);
+                            sleep(3000);
+                            break;
+                        case DONE:
+                            telemetry.addLine("DONE");
+                            break;
                     }
-                    break;
-                case LEAVE:
-                    telemetry.addLine("LEAVING");
-                    Drive.driveDistance(1000);
-                    sleep(5000);
-                    break;
-                case DONE:
-                    telemetry.addLine("DONE");
-                    break;
-                }
 
-                telemetry.addData("state",autostatemachine);
-                telemetry.update();
+                    telemetry.addData("state", autostatemachine);
+                    telemetry.update();
             }
         }
 
