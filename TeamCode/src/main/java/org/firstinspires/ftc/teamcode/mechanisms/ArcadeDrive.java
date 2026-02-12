@@ -20,6 +20,9 @@ public class ArcadeDrive {
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         leftDrive.setZeroPowerBehavior(BRAKE);
         rightDrive.setZeroPowerBehavior(BRAKE);
 
@@ -38,20 +41,35 @@ public class ArcadeDrive {
         rightDrive.setPower(rightPower);
     }
 
-    public void driveDistance(double dist)
+    public double driveDistance(double dist)
     {
         double rots = dist /(96 * pi);
         double motordist = rots * 537.7;
 
-        leftDrive.setTargetPosition((-(int)motordist));
-        rightDrive.setTargetPosition(((int)motordist));
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setPower(0.5);
+        rightDrive.setPower(0.5);
+        leftDrive.setTargetPosition((int)motordist);
+        rightDrive.setTargetPosition((int)motordist);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftDrive.setPower(0.5);
-        rightDrive.setPower(0.5);
 
+        return  leftDrive.getCurrentPosition();
+    }
+
+    public void stopMotors()
+    {
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+    }
+
+    public void startDriving()
+    {
+        leftDrive.setPower(1);
+        rightDrive.setPower(1);
     }
     // Inside ArcadeDrive.java
 

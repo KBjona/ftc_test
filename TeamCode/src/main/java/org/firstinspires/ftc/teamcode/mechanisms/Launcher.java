@@ -14,8 +14,8 @@ public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
     private final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
     private final double FULL_SPEED = 1.0;
-    private double LAUNCHER_TARGET_VELOCITY = 1200;
-    private double LAUNCHER_MIN_VELOCITY = 1150;
+    private double LAUNCHER_TARGET_VELOCITY = 1900;
+    private double LAUNCHER_MIN_VELOCITY = 1850;
 
     private DcMotorEx launcher;
     private CRServo leftFeeder;

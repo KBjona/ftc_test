@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.mechanisms.ArcadeDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
@@ -27,21 +28,21 @@ public class FarAuto extends LinearOpMode {
     int balls;
     AutoStateMachine autostatemachine;
 
+    ElapsedTime runtime = new ElapsedTime();
+
+    double left_pos;
 
     public void runOpMode()
     {
-        Drive.init(hardwareMap);
-        launcher.init(hardwareMap);
-        servo = hardwareMap.get(Servo.class,"hood");
-        balls = 3;
-        autostatemachine = AutoStateMachine.DONE;
 
         waitForStart();
         Drive.init(hardwareMap);
         launcher.init(hardwareMap);
         servo = hardwareMap.get(Servo.class,"hood");
-        balls = 3;
+        balls = 4;
         autostatemachine = AutoStateMachine.ROTATESERVO;
+        runtime.reset();
+
         if (opModeIsActive())
         {
             while (opModeIsActive()) {
@@ -49,33 +50,45 @@ public class FarAuto extends LinearOpMode {
                         case ROTATESERVO:
                             telemetry.addLine("MOVINGSERVO");
                             servo.setPosition(0.75);
-                            sleep(1000);
-                            autostatemachine = AutoStateMachine.SHOOT;
+                            if (runtime.seconds() > 2)
+                            {
+                                runtime.reset();
+                                autostatemachine = AutoStateMachine.SHOOT;
+                            }
                             break;
                         case SHOOT:
                             if (balls > 0) {
                                 telemetry.addLine("shooting");
-                                launcher.startLauncher(2000, 1900);
-                                balls--;
+                                telemetry.addData("velocity",launcher.getVelocity());
+                                if (runtime.seconds() > (15 - balls*4)) {
+                                    launcher.startLauncher(2100, 2050);
+                                    balls--;
+                                }
                                 launcher.updateState();
-                                sleep(2000);
-                            } else if (balls == 0) {
+                            } else if (balls == 0 && runtime.seconds() > 12) {
                                 telemetry.addLine("NOBALLS");
                                 launcher.updateState();
+                                launcher.stopLauncher();
+                                runtime.reset();
                                 autostatemachine = AutoStateMachine.LEAVE;
-                                sleep(1000);
                             }
                             break;
                         case LEAVE:
                             telemetry.addLine("LEAVING");
-                            Drive.driveDistance(35);
-                            sleep(3000);
+                            Drive.startDriving();
+                            if (runtime.seconds() > 0.3)
+                            {
+                                autostatemachine = AutoStateMachine.DONE;
+                                Drive.stopMotors();
+                            }
                             break;
                         case DONE:
                             telemetry.addLine("DONE");
                             break;
                     }
-
+                    telemetry.addData("balls", balls);
+                    telemetry.addData("left_pos",left_pos);
+                    telemetry.addData("time", runtime);
                     telemetry.addData("state", autostatemachine);
                     telemetry.update();
             }
