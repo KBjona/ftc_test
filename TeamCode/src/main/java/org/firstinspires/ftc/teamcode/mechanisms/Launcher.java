@@ -6,8 +6,15 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import FtcRobotController.src.LookUpTable;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.lib.Visun.visun;
+import org.firstinspires.ftc.teamcode.lib.banna.LookUpTable;
+import org.firstinspires.ftc.teamcode.lib.banna.Translation2d;
+
+import TeamCode.java.org.firstinspire.ftc.teamcode.src.LookUpTable;
 import FtcRobotController.src.AutoStaticRobotPose;
 import FtcRobotController.src.Translation2d;
 
@@ -18,12 +25,17 @@ public class Launcher {
     private double LAUNCHER_TARGET_VELOCITY = 1200;
     private double LAUNCHER_MIN_VELOCITY = 1150;
 
+    visun visun;
+
+    CRServo servo;
+
     LookUpTable LookUpTable;
     AutoStaticRobotPose AutoStaticRobotPose;
 
     private DcMotorEx launcher;
     private CRServo leftFeeder;
     private CRServo rightFeeder;
+    private Servo hood;
 
     Pose2D targetPose;
     Pose2D RobotPose;
@@ -37,16 +49,14 @@ public class Launcher {
     }
     private LaunchState launchState;
 
-    public double getDistensFromTarget(){
-        return new Translation2d(targetPose.getTrnslasen().minus(RobtotPose));
-    }
 
     public void init(HardwareMap hwMap)
     {
+        this.servo = servo;
         launcher = hwMap.get(DcMotorEx.class,"launcher");
         leftFeeder = hwMap.get(CRServo.class, "left_feeder");
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
-
+        hood = hwMap.get(Servo.class,"hood");
         LookUpTable = new LookUpTable(2);
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -55,14 +65,10 @@ public class Launcher {
                 new PIDFCoefficients(300,0,0,10));
 
         leftFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
-        AutoStaticRobotPose = new AutoStaticRobotPose();
         launchState = LaunchState.IDLE;
         stopLauncher();
         updatePoint();
     }
-
-
-
 
     /**
      * how to use look up table
@@ -73,7 +79,8 @@ public class Launcher {
      */
 
     public void updatePoint(){
-        LookUpTable.add(0,0,0);
+        LookUpTable.add(0,1200,0.66);
+        LookUpTable.add(4.0894,2030,0.74);
     }
 
     public void stopfeeders()
@@ -100,7 +107,7 @@ public class Launcher {
             case IDLE:
                 break;
             case SPIN_UP:
-                launcher.setVelocity(LookUpTable.get(0)[1]);
+                launcher.setVelocity(LookUpTable.get(visun.getDictence())[1]);
                 if(launcher.getVelocity() >= LAUNCHER_MIN_VELOCITY)
                     launchState = LaunchState.LAUNCH;
                 break;
@@ -121,9 +128,9 @@ public class Launcher {
         }
     }
 
-    public void startLauncher(double velocity, double minvelocity)
+    public void startLauncher(double velocity)
     {
-        LAUNCHER_MIN_VELOCITY = minvelocity;
+        LAUNCHER_MIN_VELOCITY = velocity -40;
         LAUNCHER_TARGET_VELOCITY = velocity;
         if (launchState == LaunchState.IDLE)
         {
@@ -135,6 +142,10 @@ public class Launcher {
         stopfeeders();
         launcher.setVelocity(STOP_SPEED);
         launchState = LaunchState.IDLE;
+    }
+    public void setPos(double pos)
+    {
+        hood.setPosition(pos);
     }
 
     public String getState() {return launchState.toString(); }

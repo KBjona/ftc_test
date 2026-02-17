@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -28,7 +27,6 @@ public class CloseAuto extends LinearOpMode {
         waitForStart();
         Drive.init(hardwareMap);
         launcher.init(hardwareMap);
-        servo = hardwareMap.get(Servo.class,"hood");
         balls = 4;
         autostatemachine = AutoStateMachine.ROTATESERVO;
         runtime.reset();
@@ -39,7 +37,7 @@ public class CloseAuto extends LinearOpMode {
                 switch (autostatemachine) {
                     case ROTATESERVO:
                         telemetry.addLine("MOVINGSERVO");
-                        servo.setPosition(0.66);
+                        launcher.setPos(0.66);
                         if (runtime.seconds() > 2)
                         {
                             runtime.reset();
@@ -51,7 +49,7 @@ public class CloseAuto extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1200, 1150);
+                                launcher.startLauncher(1200);
                                 balls--;
                             }
                             launcher.updateState();

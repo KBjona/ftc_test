@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.ams.AMSColorSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -16,12 +15,10 @@ public class MainTeleop extends OpMode {
     Launcher launcher = new Launcher();
     double targetvelocity = 2000.0;
 
-    private Servo servo;
 
     @Override
     public void init()
     {
-        servo = hardwareMap.get(Servo.class,"hood");
         Drive.init(hardwareMap);
         launcher.init(hardwareMap);
 
@@ -37,9 +34,9 @@ public class MainTeleop extends OpMode {
             launcher.stopLauncher();
 
         if (gamepad2.right_bumper)
-            launcher.startLauncher(1200,1150);
+            launcher.startLauncher(1200);
         else if (gamepad2.left_bumper)
-            launcher.startLauncher(2100,2000);
+            launcher.startLauncher(2100);
         /*
         if (gamepad1.leftBumperWasReleased())
             targetvelocity -= 3;
@@ -53,16 +50,14 @@ public class MainTeleop extends OpMode {
         */
 
         if (gamepad2.right_trigger_pressed)
-            servo.setPosition(0.68);
-        servo.getPosition();
+            launcher.setPos(0.68);
         if (gamepad2.left_trigger_pressed)
-            servo.setPosition(0.75);
+            launcher.setPos(0.75);
 
 
 
         launcher.updateState();
         telemetry.addData("current target velocity", targetvelocity);
-        telemetry.addData("Hood position", servo.getPosition());
         telemetry.addData("Launcher state", launcher.getState());
         telemetry.addData("Launcher velocity", launcher.getVelocity());
         telemetry.update();

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -24,7 +23,6 @@ public class FarAuto extends LinearOpMode {
 
     ArcadeDrive Drive = new ArcadeDrive();
     Launcher launcher = new Launcher();
-    private Servo servo;
     int balls;
     AutoStateMachine autostatemachine;
 
@@ -38,7 +36,6 @@ public class FarAuto extends LinearOpMode {
         waitForStart();
         Drive.init(hardwareMap);
         launcher.init(hardwareMap);
-        servo = hardwareMap.get(Servo.class,"hood");
         balls = 4;
         autostatemachine = AutoStateMachine.ROTATESERVO;
         runtime.reset();
@@ -49,7 +46,7 @@ public class FarAuto extends LinearOpMode {
                     switch (autostatemachine) {
                         case ROTATESERVO:
                             telemetry.addLine("MOVINGSERVO");
-                            servo.setPosition(0.74);
+                            launcher.setPos(0.74);
                             if (runtime.seconds() > 1)
                             {
                                 runtime.reset();
@@ -61,7 +58,7 @@ public class FarAuto extends LinearOpMode {
                                 telemetry.addLine("shooting");
                                 telemetry.addData("velocity",launcher.getVelocity());
                                 if (runtime.seconds() > (15 - balls*3.4)) {
-                                    launcher.startLauncher(2030, 1990);
+                                    launcher.startLauncher(2030);
                                     balls--;
                                 }
                                 launcher.updateState();
