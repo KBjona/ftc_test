@@ -66,10 +66,15 @@ public class ArcadeDrive {
         rightDrive.setPower(0);
     }
 
-    public void startDriving()
+    public void startDriving(double power)
     {
-        leftDrive.setPower(1);
-        rightDrive.setPower(1);
+        leftDrive.setPower(power);
+        rightDrive.setPower(power);
+    }
+
+    public void turnRight()
+    {
+        rightDrive.setPower(-0.5);
     }
     // Inside ArcadeDrive.java
 

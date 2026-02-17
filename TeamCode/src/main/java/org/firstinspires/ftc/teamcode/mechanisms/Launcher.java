@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Launcher {
-    private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
+    private final double FEED_TIME_SECONDS = 0.25; //The feeder servos run this long when a shot is requested.
     private final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
     private final double FULL_SPEED = 1.0;
     private double LAUNCHER_TARGET_VELOCITY = 1900;
@@ -69,6 +69,7 @@ public class Launcher {
             case LAUNCH:
                 leftFeeder.setPower(FULL_SPEED);
                 rightFeeder.setPower(FULL_SPEED);
+
                 feederTimer.reset();
                 launchState =LaunchState.LAUNCHING;
                 break;

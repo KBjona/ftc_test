@@ -49,8 +49,8 @@ public class FarAuto extends LinearOpMode {
                     switch (autostatemachine) {
                         case ROTATESERVO:
                             telemetry.addLine("MOVINGSERVO");
-                            servo.setPosition(0.75);
-                            if (runtime.seconds() > 2)
+                            servo.setPosition(0.74);
+                            if (runtime.seconds() > 1)
                             {
                                 runtime.reset();
                                 autostatemachine = AutoStateMachine.SHOOT;
@@ -60,8 +60,8 @@ public class FarAuto extends LinearOpMode {
                             if (balls > 0) {
                                 telemetry.addLine("shooting");
                                 telemetry.addData("velocity",launcher.getVelocity());
-                                if (runtime.seconds() > (15 - balls*4)) {
-                                    launcher.startLauncher(2100, 2050);
+                                if (runtime.seconds() > (15 - balls*3.4)) {
+                                    launcher.startLauncher(2030, 1990);
                                     balls--;
                                 }
                                 launcher.updateState();
@@ -70,12 +70,12 @@ public class FarAuto extends LinearOpMode {
                                 launcher.updateState();
                                 launcher.stopLauncher();
                                 runtime.reset();
-                                autostatemachine = AutoStateMachine.LEAVE;
+                                autostatemachine = AutoStateMachine.LEAVE; //DONE change back to leave when done testing
                             }
                             break;
                         case LEAVE:
                             telemetry.addLine("LEAVING");
-                            Drive.startDriving();
+                            Drive.startDriving(1);
                             if (runtime.seconds() > 0.3)
                             {
                                 autostatemachine = AutoStateMachine.DONE;
