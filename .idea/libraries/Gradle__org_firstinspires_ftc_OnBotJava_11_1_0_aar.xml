@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="Gradle: org.firstinspires.ftc:OnBotJava:11.1.0@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/8.9/transforms/fe268f2bf215a4162ac5902fd627abf8/transformed/OnBotJava-11.1.0/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/8.9/transforms/fe268f2bf215a4162ac5902fd627abf8/transformed/OnBotJava-11.1.0/jars/libs/javac.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.9/transforms/fe268f2bf215a4162ac5902fd627abf8/transformed/OnBotJava-11.1.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.9/transforms/fe268f2bf215a4162ac5902fd627abf8/transformed/OnBotJava-11.1.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.firstinspires.ftc/OnBotJava/11.1.0/7a19c184677acf8b2a319698b0d7d1e46b5ea6bf/OnBotJava-11.1.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.firstinspires.ftc/OnBotJava/11.1.0/83e39d9c2f492e159341fe2fbf52411d86dabd36/OnBotJava-11.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

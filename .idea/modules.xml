@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ftc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ftc_test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.main.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/ftc_test.FtcRobotController.unitTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.androidTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/ftc_test.TeamCode.unitTest.iml" />
+    </modules>
+  </component>
+</project>
