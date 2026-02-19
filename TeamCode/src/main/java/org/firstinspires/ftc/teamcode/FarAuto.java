@@ -49,9 +49,18 @@ public class FarAuto extends LinearOpMode {
                     switch (autostatemachine) {
                         case ROTATESERVO:
                             telemetry.addLine("MOVINGSERVO");
-                            servo.setPosition(0.74);
-                            if (runtime.seconds() > 1)
+                            servo.setPosition(0.67);
+                            if (runtime.seconds() > 0.1 && runtime.seconds() < 0.5)
                             {
+                                Drive.startDriving(0.2); //TODO change direction
+                            }
+                            if (runtime.seconds() > 0.5 && runtime.seconds() < 0.98)
+                            {
+                                Drive.turnLeft();
+                            }
+                            if (runtime.seconds() > 0.98)
+                            {
+                                Drive.stopMotors();
                                 runtime.reset();
                                 autostatemachine = AutoStateMachine.SHOOT;
                             }
@@ -61,7 +70,9 @@ public class FarAuto extends LinearOpMode {
                                 telemetry.addLine("shooting");
                                 telemetry.addData("velocity",launcher.getVelocity());
                                 if (runtime.seconds() > (15 - balls*3.4)) {
-                                    launcher.startLauncher(2030, 1990);
+                                    servo.setPosition(0.68);
+                                    launcher.startLauncher(2087, 2085);
+                                    servo.setPosition(0.68);
                                     balls--;
                                 }
                                 launcher.updateState();
@@ -75,11 +86,12 @@ public class FarAuto extends LinearOpMode {
                             break;
                         case LEAVE:
                             telemetry.addLine("LEAVING");
-                            Drive.startDriving(1);
+                            Drive.startDriving(0.6);
                             if (runtime.seconds() > 0.3)
                             {
                                 autostatemachine = AutoStateMachine.DONE;
                                 Drive.stopMotors();
+
                             }
                             break;
                         case DONE:

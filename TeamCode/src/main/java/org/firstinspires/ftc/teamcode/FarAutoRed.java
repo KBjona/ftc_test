@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.mechanisms.ArcadeDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
 
-@Autonomous(name = "Close-Auto", group = "StarterBot")
-public class CloseAuto extends LinearOpMode {
+@Autonomous(name = "Far-Auto-Red", group = "StarterBot")
+public class FarAutoRed extends LinearOpMode {
 
     ArcadeDrive Drive = new ArcadeDrive();
     Launcher launcher = new Launcher();
@@ -39,9 +39,18 @@ public class CloseAuto extends LinearOpMode {
                 switch (autostatemachine) {
                     case ROTATESERVO:
                         telemetry.addLine("MOVINGSERVO");
-                        servo.setPosition(0.66);
-                        if (runtime.seconds() > 2)
+                        servo.setPosition(0.67);
+                        if (runtime.seconds() > 0.1 && runtime.seconds() < 0.5)
                         {
+                            Drive.startDriving(0.2);
+                        }
+                        if (runtime.seconds() > 0.5 && runtime.seconds() < 0.98)
+                        {
+                            Drive.turnRight(); //TODO change direction
+                        }
+                        if (runtime.seconds() > 0.98)
+                        {
+                            Drive.stopMotors();
                             runtime.reset();
                             autostatemachine = AutoStateMachine.SHOOT;
                         }
@@ -50,44 +59,32 @@ public class CloseAuto extends LinearOpMode {
                         if (balls > 0) {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
-                            if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1200, 1150);
+                            if (runtime.seconds() > (15 - balls*3.4)) {
+                                servo.setPosition(0.68);
+                                launcher.startLauncher(2087, 2085);
+                                servo.setPosition(0.68);
                                 balls--;
                             }
                             launcher.updateState();
-                        } else if (balls == 0 && runtime.seconds() > 13.5) {
+                        } else if (balls == 0 && runtime.seconds() > 12) {
                             telemetry.addLine("NOBALLS");
                             launcher.updateState();
                             launcher.stopLauncher();
                             runtime.reset();
-                            autostatemachine = AutoStateMachine.LEAVE;
+                            autostatemachine = AutoStateMachine.LEAVE; //DONE change back to leave when done testing
                         }
                         break;
                     case LEAVE:
                         telemetry.addLine("LEAVING");
-                        if (runtime.seconds() < 0.3)
+                        Drive.startDriving(0.6);
+                        if (runtime.seconds() > 0.3)
                         {
-                            Drive.startDriving(-0.5);
-                            telemetry.addLine("first");
-                        }
-                        if (runtime.seconds() > 0.3 && runtime.seconds() < 0.8)
-                        {
-                            Drive.turnRight();
-                            telemetry.addLine("second");
-                        }
-                            if (runtime.seconds() > 0.8 && runtime.seconds() < 1.1)
-                            {
-                                Drive.startDriving(-0.5);
-                                telemetry.addLine("third");
-                            }
-                        if (runtime.seconds() > 1.1) {
-                            telemetry.addLine("should be done");
                             autostatemachine = AutoStateMachine.DONE;
                             Drive.stopMotors();
+
                         }
                         break;
                     case DONE:
-                        Drive.stopMotors();
                         telemetry.addLine("DONE");
                         break;
                 }

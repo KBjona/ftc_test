@@ -74,7 +74,17 @@ public class ArcadeDrive {
 
     public void turnRight()
     {
+        leftDrive.setPower(0);
         rightDrive.setPower(-0.5);
+    }
+    public void turnLeft()
+    {
+        rightDrive.setPower(0);
+        leftDrive.setPower(-0.5);
+    }
+    public void brake()
+    {
+        //rightDrive.setMode();
     }
     // Inside ArcadeDrive.java
 
