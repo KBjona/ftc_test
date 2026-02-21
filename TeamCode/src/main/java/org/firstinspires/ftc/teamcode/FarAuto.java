@@ -49,16 +49,16 @@ public class FarAuto extends LinearOpMode {
                     switch (autostatemachine) {
                         case ROTATESERVO:
                             telemetry.addLine("MOVINGSERVO");
-                            servo.setPosition(0.67);
+                            servo.setPosition(0.58);
                             if (runtime.seconds() > 0.1 && runtime.seconds() < 0.5)
                             {
                                 Drive.startDriving(0.2); //TODO change direction
                             }
-                            if (runtime.seconds() > 0.5 && runtime.seconds() < 0.98)
+                            if (runtime.seconds() > 0.5 && runtime.seconds() < 1)
                             {
                                 Drive.turnLeft();
                             }
-                            if (runtime.seconds() > 0.98)
+                            if (runtime.seconds() > 1)
                             {
                                 Drive.stopMotors();
                                 runtime.reset();
@@ -70,9 +70,9 @@ public class FarAuto extends LinearOpMode {
                                 telemetry.addLine("shooting");
                                 telemetry.addData("velocity",launcher.getVelocity());
                                 if (runtime.seconds() > (15 - balls*3.4)) {
-                                    servo.setPosition(0.68);
-                                    launcher.startLauncher(2087, 2085);
-                                    servo.setPosition(0.68);
+                                    servo.setPosition(0.575);
+                                    launcher.startLauncher(2107, 2102);
+                                    servo.setPosition(0.575);
                                     balls--;
                                 }
                                 launcher.updateState();

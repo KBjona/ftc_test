@@ -41,11 +41,20 @@ public class MainTeleop extends OpMode {
         else if (gamepad2.b)
             launcher.stopLauncher();
 
-        if (gamepad2.right_bumper)
-            launcher.startLauncher(1250,1200);
-        else if (gamepad2.left_bumper)
-            launcher.startLauncher(2065,2050);
-
+        if (gamepad2.right_bumper) {
+            servo.setPosition(0.46);
+            launcher.startLauncher(1225, 1205);
+        }
+        else if (gamepad2.right_trigger_pressed) {
+            servo.setPosition(0.58);
+            launcher.startLauncher(2065, 2050);
+        }
+        else if(gamepad2.left_bumper)
+        {
+            servo.setPosition(0.48);
+            launcher.startLauncher(1600,1550);
+        }
+        /*
         if (gamepad1.leftBumperWasReleased())
             targetvelocity -= 10;
 
@@ -63,13 +72,15 @@ public class MainTeleop extends OpMode {
 
         if (gamepad1.right_trigger_pressed)
             launcher.startLauncher(targetvelocity,(targetvelocity-20));
+*/
 
-
-        if (gamepad2.right_trigger_pressed)
-            servo.setPosition(0.61);
+        if (gamepad2.dpadDownWasReleased())
+            servo.setPosition(0.58);
         servo.getPosition();
-        if (gamepad2.left_trigger_pressed)
-            servo.setPosition(0.68);
+        if (gamepad2.dpadUpWasReleased())
+            servo.setPosition(0.46);
+        if (gamepad2.dpadLeftWasPressed())
+            servo.setPosition(0.5);
 
 
 

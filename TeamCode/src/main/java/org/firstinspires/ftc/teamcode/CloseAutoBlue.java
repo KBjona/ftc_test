@@ -38,7 +38,7 @@ public class CloseAutoBlue extends LinearOpMode {
                 switch (autostatemachine) {
                     case ROTATESERVO:
                         telemetry.addLine("MOVINGSERVO");
-                        servo.setPosition(0.62);
+                        servo.setPosition(0.47);
                         if (runtime.seconds() > 2)
                         {
                             runtime.reset();
@@ -50,7 +50,7 @@ public class CloseAutoBlue extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1210, 1190);
+                                launcher.startLauncher(1207, 1195);
                                 balls--;
                             }
                             launcher.updateState();
