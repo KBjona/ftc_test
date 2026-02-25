@@ -51,7 +51,7 @@ public class MainTeleop extends OpMode {
 
         if (gamepad2.right_bumper) {
             servo.setPosition(0.67);
-            launcher.startLauncher(1205, 1200);
+                launcher.startLauncher(1205, 1200);
         }
         else if (gamepad2.left_bumper) {
             servo.setPosition(0.74); // og was 58

@@ -16,8 +16,6 @@ enum AutoStateMachine
     LEAVE,
     DONE
 
-
-
 }
 @Autonomous(name = "Far-Auto", group = "StarterBot")
 public class FarAuto extends LinearOpMode {
