@@ -108,4 +108,5 @@ public class Launcher {
 
     public boolean isBusy() {return launcher.isBusy() || leftFeeder.getPower() != 0 || rightFeeder.getPower() != 0;}
 
+    public double getTargetVelocity() {return LAUNCHER_TARGET_VELOCITY;}
 }

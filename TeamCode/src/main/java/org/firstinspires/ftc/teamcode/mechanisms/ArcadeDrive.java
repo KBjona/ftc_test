@@ -4,9 +4,13 @@ import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 
 import android.media.Ringtone;
 
+import com.qualcomm.hardware.digitalchickenlabs.OctoQuad;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import java.util.Base64;
 
 public class ArcadeDrive {
     private DcMotor leftDrive, rightDrive;
@@ -20,11 +24,15 @@ public class ArcadeDrive {
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         leftDrive.setZeroPowerBehavior(BRAKE);
         rightDrive.setZeroPowerBehavior(BRAKE);
+
 
     }
 
@@ -80,12 +88,25 @@ public class ArcadeDrive {
     public void turnLeft()
     {
         rightDrive.setPower(0);
-        leftDrive.setPower(-0.48);
+        leftDrive.setPower(-0.17);
     }
     public void brake()
     {
         //rightDrive.setMode();
     }
+    public int getLeftEncoder() { return leftDrive.getCurrentPosition();}
+    public int getRightEncoder() { return rightDrive.getCurrentPosition();}
+
+    public void turnUsingEncoder(int left,int right)
+    {
+        leftDrive.setTargetPosition(left);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        rightDrive.setTargetPosition(right);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+    }
+
     // Inside ArcadeDrive.java
 
 }

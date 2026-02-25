@@ -38,7 +38,7 @@ public class CloseAutoRed extends LinearOpMode {
                 switch (autostatemachine) {
                     case ROTATESERVO:
                         telemetry.addLine("MOVINGSERVO");
-                        servo.setPosition(0.47);
+                        servo.setPosition(0.66);
                         if (runtime.seconds() > 2)
                         {
                             runtime.reset();
@@ -50,7 +50,7 @@ public class CloseAutoRed extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1207, 1195);
+                                launcher.startLauncher(1210, 1205);
                                 balls--;
                             }
                             launcher.updateState();
@@ -69,17 +69,17 @@ public class CloseAutoRed extends LinearOpMode {
                             Drive.startDriving(-0.5);
                             telemetry.addLine("first");
                         }
-                        if (runtime.seconds() > 0.3 && runtime.seconds() < 0.8)
+                        if (runtime.seconds() > 0.3 && runtime.seconds() < 0.9)
                         {
                             Drive.turnRight();
                             telemetry.addLine("second");
                         }
-                        if (runtime.seconds() > 0.8 && runtime.seconds() < 1.1)
+                        if (runtime.seconds() > 0.9 && runtime.seconds() < 1.2)
                         {
                             Drive.startDriving(-0.5);
                             telemetry.addLine("third");
                         }
-                        if (runtime.seconds() > 1.1) {
+                        if (runtime.seconds() > 1.2) {
                             telemetry.addLine("should be done");
                             autostatemachine = AutoStateMachine.DONE;
                             Drive.stopMotors();
