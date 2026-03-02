@@ -21,6 +21,8 @@ public class Launcher {
 
     ElapsedTime feederTimer = new ElapsedTime();
 
+    LookUpTable shooterLookUpTable = new LookUpTable(2);
+
     private enum LaunchState {
         IDLE,
         SPIN_UP,
@@ -45,6 +47,21 @@ public class Launcher {
 
         launchState = LaunchState.IDLE;
         stopLauncher();
+        addPoint();
+    }
+
+
+    /**
+    * 
+    * // Shooter characterization: distance → (RPM, angle)
+    * LookUpTable shooterTable = new LookUpTable(2);  // 2 outputs
+    * shooterTable.add(1.0, 3000, 45);  // 1m: 3000 RPM, 45°
+    * shooterTable.add(2.0, 3500, 50);  // 2m: 3500 RPM, 50°
+    * shooterTable.add(3.0, 4000, 55);  // 3m: 4000 RPM, 55°
+     */
+
+    public void addPoint(){
+        shooterLookUpTable.add(0,0,0);
     }
 
     public void stopfeeders()
@@ -67,6 +84,7 @@ public class Launcher {
             case LAUNCH:
                 leftFeeder.setPower(FULL_SPEED);
                 rightFeeder.setPower(FULL_SPEED);
+                launcher.setVelocity(shooterLookUpTable.get(5));
                 feederTimer.reset();
                 launchState =LaunchState.LAUNCHING;
                 break;
