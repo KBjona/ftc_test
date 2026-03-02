@@ -50,7 +50,7 @@ public class CloseAutoBlue extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1205, 1200);
+                                launcher.startLauncher(1194, 1192);
                                 balls--;
                             }
                             launcher.updateState();

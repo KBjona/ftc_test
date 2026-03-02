@@ -50,7 +50,7 @@ public class CloseAutoRed extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1210, 1205);
+                                launcher.startLauncher(1194, 1192);
                                 balls--;
                             }
                             launcher.updateState();
