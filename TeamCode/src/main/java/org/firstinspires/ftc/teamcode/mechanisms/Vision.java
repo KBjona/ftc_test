@@ -37,7 +37,7 @@ public class Vision {
                 .build();
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hwMap.get(WebcamName.class, "Webcam")); // set camera name as Webcam in config
+        builder.setCamera(hwMap.get(WebcamName.class, "Webcam 1")); // set camera name as Webcam in config
         builder.setCameraResolution(new Size(640,480));
         builder.addProcessor(aprilTagProcessor);
 

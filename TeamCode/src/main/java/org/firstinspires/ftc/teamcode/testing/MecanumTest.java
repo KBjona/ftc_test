@@ -19,7 +19,7 @@ public class MecanumTest extends OpMode {
     @Override
     public void loop()
     {
-        Drive.drive(-(gamepad1.left_stick_y), (gamepad1.left_stick_x) , (gamepad1.right_stick_x));
+        Drive.drive(-(gamepad1.left_stick_y), -(gamepad1.left_stick_x) , (gamepad1.right_stick_x));
 
     }
 
