@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -17,6 +18,7 @@ enum AutoStateMachine
     DONE
 
 }
+@Config
 @Autonomous(name = "Far-Auto", group = "StarterBot")
 public class FarAuto extends LinearOpMode {
 

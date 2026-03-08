@@ -22,7 +22,7 @@ public class AutoRotateToAprilTag extends OpMode {
     double foward, strafe ,rotate;
 
 
-    double kP = 0.2;
+    double kP = 0.5;
     double error = 0;
     double lastError = 0;
     double goal = 0;
@@ -91,7 +91,7 @@ public class AutoRotateToAprilTag extends OpMode {
             lastError = 0;
         }
 
-        Drive.drive(foward /3,strafe /3,rotate);
+        Drive.drive(foward ,strafe ,rotate);
 
 
         if (id20 != null)
