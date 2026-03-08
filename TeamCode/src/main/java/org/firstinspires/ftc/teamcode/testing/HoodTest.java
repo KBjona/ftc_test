@@ -35,6 +35,10 @@ public class HoodTest extends OpMode {
         {
             servo.setPosition(pos);
         }
+        if (gamepad1.left_trigger_pressed)
+        {
+            launcher.startLauncher(2107, 2105);
+        }
         telemetry.addData("pos",pos);
     }
 

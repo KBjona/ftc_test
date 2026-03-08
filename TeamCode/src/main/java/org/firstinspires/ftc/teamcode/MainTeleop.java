@@ -62,7 +62,7 @@ public class MainTeleop extends OpMode {
             tryPark = false;
 
         double forward = -gamepad1.left_stick_y;
-        double strafe = -gamepad1.left_stick_x;
+        double strafe = gamepad1.left_stick_x;
         double rotate = gamepad1.right_stick_x;
 
         if (gamepad1.right_trigger > 0.5)
@@ -71,9 +71,9 @@ public class MainTeleop extends OpMode {
         }
 
         if (tryPark)
-            Drive.drive(forward / 4 , strafe / 4, rotate);
+            Drive.FieldDrive(forward / 4 , strafe / 4, rotate);
         else
-            Drive.drive(forward,strafe, rotate);
+            Drive.FieldDrive(forward,strafe, rotate);
 
         if (gamepad2.y)
             launcher.spinLauncher();
@@ -110,6 +110,16 @@ public class MainTeleop extends OpMode {
         telemetry.addData("Launcher state", launcher.getState());
         telemetry.addData("Launcher velocity", launcher.getVelocity());
         telemetry.update();
+
+        if (gamepad1.right_trigger_pressed)
+        {
+            Drive.drive(1,0,0);
+        }
+
+        if (gamepad1.left_trigger_pressed)
+        {
+            Drive.resetIMU();
+        }
     }
 
 }

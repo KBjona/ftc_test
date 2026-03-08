@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.testing;
 import static com.qualcomm.robotcore.util.Range.clip;
 
 import android.util.Range;
+import com.acmerobotics.dashboard.config.Config;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -12,7 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Vision;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-
+@Config
 @TeleOp(name = "Auto rotate test", group = "test")
 public class AutoRotateToAprilTag extends OpMode {
 
@@ -22,12 +23,12 @@ public class AutoRotateToAprilTag extends OpMode {
     double foward, strafe ,rotate;
 
 
-    double kP = 0.5;
+    public static double kP = 0.05;
     double error = 0;
     double lastError = 0;
     double goal = 0;
     double Tolerance = 0.5;
-    double kD = 0.00001;
+    public static double kD = 0.00001;
     double time = 0;
     double lastTime = 0;
     boolean saw = false;
