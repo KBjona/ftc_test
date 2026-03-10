@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import FtcRobotController.src.LookUpTable;
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.20; //The feeder servos run this long when a shot is requested.
@@ -14,6 +15,8 @@ public class Launcher {
     private final double FULL_SPEED = 1.0;
     private double LAUNCHER_TARGET_VELOCITY = 1200;
     private double LAUNCHER_MIN_VELOCITY = 1150;
+
+    LookUpTable LookUpTable;
 
     private DcMotorEx launcher;
     private CRServo leftFeeder;
@@ -37,6 +40,8 @@ public class Launcher {
         launcher = hwMap.get(DcMotorEx.class,"launcher");
         leftFeeder = hwMap.get(CRServo.class, "left_feeder");
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
+
+        LookUpTable = new LookUpTable(2);
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -64,11 +69,32 @@ public class Launcher {
         shooterLookUpTable.add(0,0,0);
     }
 
+
+    /**
+     * how to use look up table
+     *  shooterTable.add(1.0, 3000, 45);  // 1m: 3000 RPM, 45°
+     * shooterTable.add(2.0, 3500, 50);  // 2m: 3500 RPM, 50°
+     * shooterTable.add(3.0, 4000, 55);  // 3m: 4000 RPM, 55°
+     * 
+     */
+
+    public void updatePoint(){
+        LookUpTable.add(0,0,0);
+    }
+
     public void stopfeeders()
     {
         leftFeeder.setPower(STOP_SPEED);
         rightFeeder.setPower(STOP_SPEED);
     }
+
+
+
+    /**
+     * 
+     */
+
+
 
     public void updateState()
     {
