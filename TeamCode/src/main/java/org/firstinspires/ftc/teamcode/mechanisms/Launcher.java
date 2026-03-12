@@ -41,7 +41,7 @@ public class Launcher {
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                new PIDFCoefficients(300,0,0,10));
+                new PIDFCoefficients(600,0,0,11));
 
         leftFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
 

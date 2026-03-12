@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.mechanisms.ArcadeDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
+import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
 
 @Autonomous(name = "Close-Auto-Red", group = "StarterBot")
 public class CloseAutoRed extends LinearOpMode {
 
-    ArcadeDrive Drive = new ArcadeDrive();
+    MecanumDrive Drive = new MecanumDrive();
     Launcher launcher = new Launcher();
     private Servo servo;
     int balls;
@@ -38,7 +39,7 @@ public class CloseAutoRed extends LinearOpMode {
                 switch (autostatemachine) {
                     case ROTATESERVO:
                         telemetry.addLine("MOVINGSERVO");
-                        servo.setPosition(0.66);
+                        servo.setPosition(0.33);
                         if (runtime.seconds() > 2)
                         {
                             runtime.reset();
@@ -50,8 +51,8 @@ public class CloseAutoRed extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                launcher.startLauncher(1194, 1192);
-                                balls--;
+                                servo.setPosition(0.33); // ORIGNIAL 67
+                                launcher.startLauncher(1185, 1182);
                             }
                             launcher.updateState();
                         } else if (balls == 0 && runtime.seconds() > 13.5) {
@@ -71,15 +72,10 @@ public class CloseAutoRed extends LinearOpMode {
                         }
                         if (runtime.seconds() > 0.3 && runtime.seconds() < 0.9)
                         {
-                            Drive.turnRight();
+                            Drive.drive(0,-0.5,0);
                             telemetry.addLine("second");
                         }
-                        if (runtime.seconds() > 0.9 && runtime.seconds() < 1.2)
-                        {
-                            Drive.startDriving(-0.5);
-                            telemetry.addLine("third");
-                        }
-                        if (runtime.seconds() > 1.2) {
+                        if (runtime.seconds() > 0.9) {
                             telemetry.addLine("should be done");
                             autostatemachine = AutoStateMachine.DONE;
                             Drive.stopMotors();

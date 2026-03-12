@@ -12,13 +12,12 @@ public class AutoRotate {
 
     public Vision aprilTagWebcam = new Vision();
 
-
-    public static double kP = 0.05;
+    public static double kP = 0.025;
     double error = 0;
     double lastError = 0;
-    double goal = 0;
-    double Tolerance = 0.5;
-    public static double kD = 0.00001;
+    double goal = -12;
+    public static double Tolerance = 2;
+    public static double kD = 0;
     double time = 0;
     double lastTime = 0;
     double rotate = 0;
@@ -32,47 +31,56 @@ public class AutoRotate {
 
     public double getRotate(double Time, int tagId)
     {
+        if (tagId == 24)
+            goal = 12;
+        int tagNum = tagId;
+        rotate = 0;
         time = Time;
         aprilTagWebcam.update();
-        AprilTagDetection tag = aprilTagWebcam.getTagById(tagId);
-
-        if (tag != null)
-        {
-            error = goal - tag.ftcPose.bearing;
-
-            if (Math.abs(error) < Tolerance)
+        AprilTagDetection tag = aprilTagWebcam.getTagById(tagNum);
+        telemetry.addData("TAG IS NULL", tag);
+         if (tag != null)
             {
-                rotate = 0;
+                error = goal - tag.ftcPose.bearing;
+
+                if (Math.abs(error) < Tolerance)
+                {
+                    rotate = 0;
+                }
+                else
+                {
+
+                    double pTerm = error * kP;
+                    telemetry.addData("pTerm",pTerm);
+                    telemetry.addData("time",time);
+                    telemetry.addData("lasttimme",lastTime);
+                    telemetry.addData("ERRORRR",error);
+                    time = Time;
+                    double dT = time - lastTime;
+                    double dTerm = ((error - lastError) / dT) * kD;
+                    rotate = clip(pTerm + dTerm,-0.4,0.4);
+                    telemetry.addData("Rotate",rotate);
+
+                    lastError = error;
+                    lastTime = time;
+                }
             }
             else
             {
-                double pTerm = error * kP;
-
-                time = Time;
-                double dT = time - lastTime;
-                double dTerm = ((error - lastError) / dT) * kD;
-                rotate = clip(pTerm + dTerm,-0.4,0.4);
-
-                lastError = error;
-                lastTime = time;
+                lastTime = Time;
+                lastError = 0;
             }
-        }
-        else
-        {
-            lastTime = Time;
-            lastError = 0;
-        }
+
 
         if (tag != null)
         {
             telemetry.addLine("AUTO ALLIGNING");
             aprilTagWebcam.displayDetectionTelemetry(tag);
             telemetry.addData("Error", error);
-            telemetry.addData("rotate",rotate);
         }
         telemetry.addData("P ", "%.4f", kP);
         telemetry.addData("D ", "%.4f", kD);
+        telemetry.update();
         return rotate;
     }
-
 }

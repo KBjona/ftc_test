@@ -23,12 +23,12 @@ public class AutoRotateToAprilTag extends OpMode {
     double foward, strafe ,rotate;
 
 
-    public static double kP = 0.05;
+    public static double kP = 0.025;
     double error = 0;
     double lastError = 0;
-    double goal = 0;
-    double Tolerance = 0.5;
-    public static double kD = 0.00001;
+    public static double goal = -8;
+    public static double Tolerance = 1.5;
+    public static double kD = 0;
     double time = 0;
     double lastTime = 0;
     boolean saw = false;
@@ -48,7 +48,7 @@ public class AutoRotateToAprilTag extends OpMode {
     public void loop()
     {
         foward = -gamepad1.left_stick_y;
-        strafe = -gamepad1.left_stick_x;
+        strafe = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
 
         aprilTagWebcam.update();

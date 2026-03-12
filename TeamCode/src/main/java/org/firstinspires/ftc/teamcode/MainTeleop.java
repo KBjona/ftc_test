@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,18 +12,18 @@ import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
 import org.firstinspires.ftc.teamcode.mechanisms.Vision;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-
+@Config
 @TeleOp(name = "Main-Teleop", group = "StarterBot")
 public class MainTeleop extends OpMode {
     MecanumDrive Drive = new MecanumDrive();
     Launcher launcher = new Launcher();
-    Vision aprilTagWebcam = new Vision();
     AutoRotate rotation = new AutoRotate();
-    double targetvelocity = 2000.0;
-    boolean tryPark = false;
+    public static double  targetvelocity = 2110.0;
+    int tryPark = 1;
     private Servo servo;
-    double targethood = 0.66;
+    public static double targethood = 0.36;
     int tag = 0;
+    boolean driveMode = false;
 
     @Override
     public void init()
@@ -43,6 +44,7 @@ public class MainTeleop extends OpMode {
             telemetry.addLine("TAG IS NOW BLUE");
             tag = 20;
         }
+        telemetry.addLine("SCREAM AT ME OFIRRRRRRRRRRRRRRRRRRRRR");
         telemetry.addData("TAG (20 = blue, 24 = red)", tag);
     }
 
@@ -57,9 +59,13 @@ public class MainTeleop extends OpMode {
     public void loop()
     {
         if (gamepad1.right_bumper)
-            tryPark = true;
+            tryPark = 4;
         if (gamepad1.left_bumper)
-            tryPark = false;
+            tryPark = 1;
+        if (gamepad1.dpad_left)
+            driveMode = true;
+        if (gamepad1.dpad_right)
+            driveMode = false;
 
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
@@ -68,12 +74,13 @@ public class MainTeleop extends OpMode {
         if (gamepad1.right_trigger > 0.5)
         {
             rotate = rotation.getRotate(time, tag);
+            telemetry.addData("rotation",rotate);
         }
 
-        if (tryPark)
-            Drive.FieldDrive(forward / 4 , strafe / 4, rotate);
+        if (driveMode)
+            Drive.FieldDrive(forward / tryPark , strafe / tryPark, rotate / tryPark);
         else
-            Drive.FieldDrive(forward,strafe, rotate);
+            Drive.drive(forward / tryPark , strafe / tryPark, rotate / tryPark);
 
         if (gamepad2.y)
             launcher.spinLauncher();
@@ -81,22 +88,27 @@ public class MainTeleop extends OpMode {
             launcher.stopLauncher();
 
         if (gamepad2.right_bumper) {
-            servo.setPosition(0.57); // ORIGNIAL 67
+            servo.setPosition(0.28); // ORIGNIAL 67
             launcher.startLauncher(1194, 1192);
+
         }
         else if (gamepad2.left_bumper) {
-            servo.setPosition(0.64); // og was 58
-            launcher.startLauncher(2107, 2105);
+            servo.setPosition(0.36); // og was 58
+            launcher.startLauncher(2100,2098);
         }
         else if(gamepad2.left_trigger_pressed)
         {
-            servo.setPosition(0.61);
-            launcher.startLauncher(1725,1715);
+            servo.setPosition(0.35);
+            //servo.setPosition(targethood);
+
+            launcher.startLauncher(1620,1620);
         }
         else if(gamepad2.right_trigger_pressed)
         {
-            servo.setPosition(0.60);
-            launcher.startLauncher(1550,1540);
+            servo.setPosition(0.36);
+            //servo.setPosition(targethood);
+
+            launcher.startLauncher(1375,1370);
         }
 
         launcher.updateState();
@@ -109,14 +121,10 @@ public class MainTeleop extends OpMode {
         telemetry.addData("Hood position", servo.getPosition());
         telemetry.addData("Launcher state", launcher.getState());
         telemetry.addData("Launcher velocity", launcher.getVelocity());
+        telemetry.addData("leftstick X", gamepad1.left_stick_x);
         telemetry.update();
 
-        if (gamepad1.right_trigger_pressed)
-        {
-            Drive.drive(1,0,0);
-        }
-
-        if (gamepad1.left_trigger_pressed)
+        if (gamepad1.ps)
         {
             Drive.resetIMU();
         }
