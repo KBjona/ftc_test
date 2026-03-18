@@ -32,7 +32,7 @@ public class AutoRotate {
     public double getRotate(double Time, int tagId)
     {
         if (tagId == 24)
-            goal = 12;
+            goal = 3;
         int tagNum = tagId;
         rotate = 0;
         time = Time;

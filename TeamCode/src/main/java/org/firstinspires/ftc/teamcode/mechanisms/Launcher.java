@@ -9,13 +9,14 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.25; //The feeder servos run this long when a shot is requested.
     private final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
-    private final double FULL_SPEED = 1.0;
-    private double LAUNCHER_TARGET_VELOCITY = 1900;
-    private double LAUNCHER_MIN_VELOCITY = 1850;
+    private final double FULL_SPEED =    1.0;
+    private double LAUNCHER_TARGET_VELOCITY = 2200;
+    private double LAUNCHER_MIN_VELOCITY = 2199;
 
     private DcMotorEx launcher;
     private CRServo leftFeeder;
@@ -39,11 +40,11 @@ public class Launcher {
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
 
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                new PIDFCoefficients(600,0,0,11));
+                new PIDFCoefficients(6, 0, 0, 13.5));
 
-        leftFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
+        rightFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
 
         launchState = LaunchState.IDLE;
         stopLauncher();
@@ -109,4 +110,6 @@ public class Launcher {
     public boolean isBusy() {return launcher.isBusy() || leftFeeder.getPower() != 0 || rightFeeder.getPower() != 0;}
 
     public double getTargetVelocity() {return LAUNCHER_TARGET_VELOCITY;}
+
+    public double getVoltage() {return launcher.getCurrent(CurrentUnit.AMPS);}
 }

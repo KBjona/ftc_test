@@ -1,16 +1,17 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
 import org.firstinspires.ftc.teamcode.mechanisms.AutoRotate;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
 import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.Vision;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 @Config
 @TeleOp(name = "Main-Teleop", group = "StarterBot")
@@ -21,18 +22,23 @@ public class MainTeleop extends OpMode {
     public static double  targetvelocity = 2110.0;
     int tryPark = 1;
     private Servo servo;
-    public static double targethood = 0.36;
+    public static double targethood = 0.42;
     int tag = 0;
     boolean driveMode = false;
+    private DcMotor kicker;
+
 
     @Override
     public void init()
     {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         servo = hardwareMap.get(Servo.class,"hood");
         Drive.init(hardwareMap);
         launcher.init(hardwareMap);
         rotation.init(hardwareMap,telemetry);
-
+        kicker = hardwareMap.get(DcMotor.class, "kicker");
+        kicker.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     public void init_loop()
     {
@@ -88,13 +94,13 @@ public class MainTeleop extends OpMode {
             launcher.stopLauncher();
 
         if (gamepad2.right_bumper) {
-            servo.setPosition(0.28); // ORIGNIAL 67
-            launcher.startLauncher(1194, 1192);
+            servo.setPosition(0); // ORIGNIAL 67
+            launcher.startLauncher(1240, 1238);
 
         }
         else if (gamepad2.left_bumper) {
-            servo.setPosition(0.36); // og was 58
-            launcher.startLauncher(2100,2098);
+            servo.setPosition(0.38); // og was 58
+            launcher.startLauncher(2200,2195);
         }
         else if(gamepad2.left_trigger_pressed)
         {
@@ -105,23 +111,18 @@ public class MainTeleop extends OpMode {
         }
         else if(gamepad2.right_trigger_pressed)
         {
-            servo.setPosition(0.36);
+            servo.setPosition(targethood);
             //servo.setPosition(targethood);
-
-            launcher.startLauncher(1375,1370);
+            launcher.startLauncher(1525,1520);
         }
 
         launcher.updateState();
 
-        telemetry.addData("left y", gamepad1.left_stick_y);
-        telemetry.addData("right x", gamepad1.right_stick_x);
-        telemetry.addData("Speed state", tryPark);
         telemetry.addData("current target velocity", launcher.getTargetVelocity());
-        telemetry.addData("hood pos", targethood);
         telemetry.addData("Hood position", servo.getPosition());
         telemetry.addData("Launcher state", launcher.getState());
         telemetry.addData("Launcher velocity", launcher.getVelocity());
-        telemetry.addData("leftstick X", gamepad1.left_stick_x);
+        telemetry.addData("flywheel cur", launcher.getVoltage());
         telemetry.update();
 
         if (gamepad1.ps)
