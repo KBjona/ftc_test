@@ -92,7 +92,7 @@ public class Launcher {
         LAUNCHER_TARGET_VELOCITY = velocity;
         if (launchState == LaunchState.IDLE)
         {
-            launchState = LaunchState.SPIN_UP;
+            launchState = LaunchState.SPIN_UP;setDirection
         }
     }
     public void stopLauncher()
