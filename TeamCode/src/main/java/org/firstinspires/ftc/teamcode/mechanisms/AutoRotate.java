@@ -32,7 +32,7 @@ public class AutoRotate {
     public double getRotate(double Time, int tagId)
     {
         if (tagId == 24)
-            goal = 3;
+            goal = -11;
         int tagNum = tagId;
         rotate = 0;
         time = Time;
@@ -78,6 +78,8 @@ public class AutoRotate {
             aprilTagWebcam.displayDetectionTelemetry(tag);
             telemetry.addData("Error", error);
         }
+        telemetry.addData("Error", error);
+        aprilTagWebcam.displayDetectionTelemetry(tag);
         telemetry.addData("P ", "%.4f", kP);
         telemetry.addData("D ", "%.4f", kD);
         telemetry.update();

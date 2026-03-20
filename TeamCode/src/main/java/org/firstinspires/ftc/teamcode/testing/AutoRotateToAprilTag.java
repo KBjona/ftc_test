@@ -52,7 +52,7 @@ public class AutoRotateToAprilTag extends OpMode {
         rotate = gamepad1.right_stick_x;
 
         aprilTagWebcam.update();
-        AprilTagDetection id20 = aprilTagWebcam.getTagById(20);
+        AprilTagDetection id20 = aprilTagWebcam.getTagById(24);
 
         if (gamepad1.right_trigger >= 0.4)
         {
@@ -98,9 +98,10 @@ public class AutoRotateToAprilTag extends OpMode {
         if (id20 != null)
         {
             telemetry.addLine("AUTO ALLIGNING");
-            aprilTagWebcam.displayDetectionTelemetry(id20);
             telemetry.addData("Error", error);
         }
+        aprilTagWebcam.displayDetectionTelemetry(id20);
+
         telemetry.addData("stick", gamepad1.right_trigger);
         telemetry.addData("P ", "%.4f", kP);
         telemetry.addData("D ", "%.4f", kD);

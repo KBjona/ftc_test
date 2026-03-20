@@ -42,7 +42,7 @@ public class Launcher {
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                new PIDFCoefficients(6, 0, 0, 13.5));
+                new PIDFCoefficients(3, 0, 0, 13.4));
 
         rightFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
 
@@ -105,6 +105,10 @@ public class Launcher {
     public String getState() {return launchState.toString(); }
     public double getVelocity() {return launcher.getVelocity(); }
 
+    double kP = 0.002;
+    public void setLauncherVelocity(double velocity){
+        launcher.setPower(velocity * (0.00462/12.0) + (kP * (velocity - getVelocity())));
+    }
     public void spinLauncher() {launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);}
 
     public boolean isBusy() {return launcher.isBusy() || leftFeeder.getPower() != 0 || rightFeeder.getPower() != 0;}

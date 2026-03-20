@@ -94,30 +94,33 @@ public class MainTeleop extends OpMode {
             launcher.stopLauncher();
 
         if (gamepad2.right_bumper) {
-            servo.setPosition(0); // ORIGNIAL 67
-            launcher.startLauncher(1240, 1238);
+            servo.setPosition(0.23); // ORIGNIAL 67
+            launcher.startLauncher(1220, 1218);
 
         }
         else if (gamepad2.left_bumper) {
-            servo.setPosition(0.38); // og was 58
+            //servo.setPosition(0.38); // og was 58
             launcher.startLauncher(2200,2195);
         }
         else if(gamepad2.left_trigger_pressed)
         {
-            servo.setPosition(0.35);
+            servo.setPosition(0.28);
             //servo.setPosition(targethood);
 
-            launcher.startLauncher(1620,1620);
+            launcher.startLauncher(1550,1548);
         }
         else if(gamepad2.right_trigger_pressed)
         {
-            servo.setPosition(targethood);
+            servo.setPosition(targethood); // 0.26
             //servo.setPosition(targethood);
-            launcher.startLauncher(1525,1520);
+            launcher.startLauncher(targetvelocity,targetvelocity-2); //1380
         }
-
-        launcher.updateState();
-
+        launcher.updateState(); // CLOSE - 0.23, 1TILE - 0.26, 2TILE - 0.28
+        //                         CLOSE - 1220, 1TILE - 1370, 2TILE - 1500
+        // first - 0.23, 1220
+        // second - 0.25, 1300, 1.24-0.31
+        // third - 0.29. 1560,
+        // fourth - 0.29, 1700
         telemetry.addData("current target velocity", launcher.getTargetVelocity());
         telemetry.addData("Hood position", servo.getPosition());
         telemetry.addData("Launcher state", launcher.getState());

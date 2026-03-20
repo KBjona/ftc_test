@@ -33,7 +33,7 @@ public class Vision {
                 .setDrawTagOutline(true)
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
-                .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
+                .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
                 .build();
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
