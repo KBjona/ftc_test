@@ -39,7 +39,7 @@ public class CloseAutoRed extends LinearOpMode {
                 switch (autostatemachine) {
                     case ROTATESERVO:
                         telemetry.addLine("MOVINGSERVO");
-                        servo.setPosition(0.33);
+                        servo.setPosition(0.24);
                         if (runtime.seconds() > 2)
                         {
                             runtime.reset();
@@ -51,11 +51,12 @@ public class CloseAutoRed extends LinearOpMode {
                             telemetry.addLine("shooting");
                             telemetry.addData("velocity",launcher.getVelocity());
                             if (runtime.seconds() > (13.5 - balls*3)) {
-                                servo.setPosition(0.33); // ORIGNIAL 67
-                                launcher.startLauncher(1185, 1182);
+                                servo.setPosition(0.24); // ORIGNIAL 67
+                                launcher.startLauncher(1220, 1215);
+                                balls--;
                             }
                             launcher.updateState();
-                        } else if (balls == 0 && runtime.seconds() > 13.5) {
+                        } else if (balls == 0 && runtime.seconds() > 11.5) {
                             telemetry.addLine("NOBALLS");
                             launcher.updateState();
                             launcher.stopLauncher();
@@ -67,6 +68,7 @@ public class CloseAutoRed extends LinearOpMode {
                         telemetry.addLine("LEAVING");
                         if (runtime.seconds() < 0.3)
                         {
+                            launcher.stopLauncher();
                             Drive.startDriving(-0.5);
                             telemetry.addLine("first");
                         }

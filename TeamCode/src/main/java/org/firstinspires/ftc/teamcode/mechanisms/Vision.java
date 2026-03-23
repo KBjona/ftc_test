@@ -1,83 +1,106 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
-import android.util.Size;
+import static com.qualcomm.robotcore.util.Range.clip;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.ArrayList;
-import java.util.List;
-
+@Config
 public class Vision {
 
-    private AprilTagProcessor aprilTagProcessor;
-    private VisionPortal visionPortal;
+    public VisionUtils aprilTagWebcam = new VisionUtils();
 
-    private List<AprilTagDetection> detectedTags = new ArrayList<>();
-
+    public static double kP = 0.025;
+    double error = 0;
+    double lastError = 0;
+    double goal = -12;
+    public static double Tolerance = 2;
+    public static double kD = 0;
+    double time = 0;
+    double lastTime = 0;
+    double rotate = 0;
     private Telemetry telemetry;
 
-    public void init(HardwareMap hwMap, Telemetry telemetry)
+    public void init(HardwareMap hwMap, Telemetry telemetryinit)
     {
-        this.telemetry = telemetry;
-
-        aprilTagProcessor = new AprilTagProcessor.Builder()
-                .setDrawTagID(true)
-                .setDrawTagOutline(true)
-                .setDrawAxes(true)
-                .setDrawCubeProjection(true)
-                .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
-                .build();
-
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hwMap.get(WebcamName.class, "Webcam 1")); // set camera name as Webcam in config
-        builder.setCameraResolution(new Size(1280,720));
-        builder.addProcessor(aprilTagProcessor);
-
-        visionPortal = builder.build();
+        aprilTagWebcam.init(hwMap, telemetryinit);
+        this.telemetry = telemetryinit;
     }
 
-    public void update()
+    public double getRotate(double Time, int tagId)
     {
-        detectedTags = aprilTagProcessor.getDetections();
-    }
+        if (tagId == 24)
+            goal = -11;
+        int tagNum = tagId;
+        rotate = 0;
+        time = Time;
+        aprilTagWebcam.update();
+        AprilTagDetection tag = aprilTagWebcam.getTagById(tagNum);
+        telemetry.addData("TAG IS NULL", tag);
+         if (tag != null)
+            {
+                error = goal - tag.ftcPose.bearing;
 
-    public List<AprilTagDetection> getDetectedTags() { return detectedTags; }
+                if (Math.abs(error) < Tolerance)
+                {
+                    rotate = 0;
+                }
+                else
+                {
 
-    public void displayDetectionTelemetry(AprilTagDetection detectedId)
-    {
-        if (detectedId == null)
-            return;
-        if (detectedId.metadata != null) {
-            telemetry.addLine(String.format("\n==== (ID %d) %s", detectedId.id, detectedId.metadata.name));
-            telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (cm)", detectedId.ftcPose.x, detectedId.ftcPose.y, detectedId.ftcPose.z));
-            telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detectedId.ftcPose.pitch, detectedId.ftcPose.roll, detectedId.ftcPose.yaw));
-            telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (cm, deg, deg)", detectedId.ftcPose.range, detectedId.ftcPose.bearing, detectedId.ftcPose.elevation));
-        } else {
-            telemetry.addLine(String.format("\n==== (ID %d) Unknown", detectedId.id));
-            telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detectedId.center.x, detectedId.center.y));
-        }
-    }
+                    double pTerm = error * kP;
+                    telemetry.addData("pTerm",pTerm);
+                    telemetry.addData("time",time);
+                    telemetry.addData("lasttimme",lastTime);
+                    telemetry.addData("ERRORRR",error);
+                    time = Time;
+                    double dT = time - lastTime;
+                    double dTerm = ((error - lastError) / dT) * kD;
+                    rotate = clip(pTerm + dTerm,-0.4,0.4);
+                    telemetry.addData("Rotate",rotate);
 
-    public AprilTagDetection getTagById(int id)
-    {
-        for(AprilTagDetection detection : detectedTags)
+                    lastError = error;
+                    lastTime = time;
+                }
+            }
+            else
+            {
+                lastTime = Time;
+                lastError = 0;
+            }
+
+
+        if (tag != null)
         {
-            if (detection.id == id)
-                return detection;
+            telemetry.addLine("AUTO ALLIGNING");
+            aprilTagWebcam.displayDetectionTelemetry(tag);
+            telemetry.addData("Error", error);
         }
-        return null;
+        telemetry.addData("Error", error);
+        aprilTagWebcam.displayDetectionTelemetry(tag);
+        telemetry.addData("P ", "%.4f", kP);
+        telemetry.addData("D ", "%.4f", kD);
+        telemetry.update();
+        return rotate;
     }
-    public void stop()
+    public double getDist(int tagId)
     {
-        if (visionPortal != null)
-            visionPortal.close();
+        int tagNum = tagId;
+        aprilTagWebcam.update();
+        AprilTagDetection tag = aprilTagWebcam.getTagById(tagNum);
+        if (tag != null)
+            return tag.ftcPose.range;
+        return 0;
+    }
+    public double getOffset(int tagId)
+    {
+        int tagNum = tagId;
+        aprilTagWebcam.update();
+        AprilTagDetection tag = aprilTagWebcam.getTagById(tagNum);
+        if (tag != null)
+            return tag.ftcPose.bearing;
+        return 180;
     }
 }

@@ -1,16 +1,15 @@
 package org.firstinspires.ftc.teamcode.testing;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.mechanisms.Vision;
+import org.firstinspires.ftc.teamcode.mechanisms.VisionUtils;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 @TeleOp(name = "Vision test", group = "test")
 public class AprilTagTest extends OpMode {
 
-    Vision aprilTagWebcam = new Vision();
+    VisionUtils aprilTagWebcam = new VisionUtils();
 
     @Override
     public void init()

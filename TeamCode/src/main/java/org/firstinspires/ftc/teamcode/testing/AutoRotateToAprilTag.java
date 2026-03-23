@@ -2,22 +2,19 @@ package org.firstinspires.ftc.teamcode.testing;
 
 import static com.qualcomm.robotcore.util.Range.clip;
 
-import android.util.Range;
 import com.acmerobotics.dashboard.config.Config;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.Vision;
+import org.firstinspires.ftc.teamcode.mechanisms.VisionUtils;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 @Config
 @TeleOp(name = "Auto rotate test", group = "test")
 public class AutoRotateToAprilTag extends OpMode {
 
-    Vision aprilTagWebcam = new Vision();
+    VisionUtils aprilTagWebcam = new VisionUtils();
     MecanumDrive Drive = new MecanumDrive();
 
     double foward, strafe ,rotate;

@@ -8,14 +8,16 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.utils.LookUpTable;
 
 public class Launcher {
     private final double FEED_TIME_SECONDS = 0.25; //The feeder servos run this long when a shot is requested.
     private final double STOP_SPEED = 0.0; //We send this power to the servos when we want them to stop.
     private final double FULL_SPEED =    1.0;
     private double LAUNCHER_TARGET_VELOCITY = 2200;
+
+    public LookUpTable lookUpTable;
     private double LAUNCHER_MIN_VELOCITY = 2199;
 
     private DcMotorEx launcher;
@@ -35,6 +37,7 @@ public class Launcher {
 
     public void init(HardwareMap hwMap)
     {
+        lookUpTable = new LookUpTable(2);
         launcher = hwMap.get(DcMotorEx.class,"launcher");
         leftFeeder = hwMap.get(CRServo.class, "left_feeder");
         rightFeeder = hwMap.get(CRServo.class, "right_feeder");
@@ -42,12 +45,32 @@ public class Launcher {
         launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         launcher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         launcher.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
-                new PIDFCoefficients(3, 0, 0, 13.4));
+                new PIDFCoefficients(0.2, 0, 0, 13));
 
         rightFeeder.setDirection((DcMotorSimple.Direction.REVERSE));
 
         launchState = LaunchState.IDLE;
         stopLauncher();
+        addPoint();
+    }
+
+
+    private void addPoint(){
+        lookUpTable.add(72, 0.26, 1327); //dist (CM),vel , angle
+        lookUpTable.add(86, 0.265, 1350);
+        lookUpTable.add(100,0.27, 1385);
+        lookUpTable.add(114, 0.28, 1455);
+        lookUpTable.add(126, 0.285, 1515);
+        lookUpTable.add(150, 0.285, 1605);
+        lookUpTable.add(207, 0.293, 1770);
+        lookUpTable.add(245,0.289,1837);
+        //72cm, 0.26, 1327
+        //86cm, 0.265, 1350
+        //100cm, 0.27, 1390
+        //114cm, 0.28, 1460
+        //126cm, 0.285, 1520
+        //150cm, 0.285, 1618
+
     }
 
     public void stopfeeders()
@@ -64,7 +87,7 @@ public class Launcher {
                 break;
             case SPIN_UP:
                 launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
-                if(launcher.getVelocity() >= LAUNCHER_MIN_VELOCITY)
+                if(launcher.getVelocity() >= LAUNCHER_MIN_VELOCITY && launcher.getVelocity() <= LAUNCHER_TARGET_VELOCITY + 10)
                     launchState = LaunchState.LAUNCH;
                 break;
             case LAUNCH:
