@@ -64,46 +64,50 @@ public class MainTeleop extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.right_bumper)
-            tryPark = 4;
-        if (gamepad1.left_bumper)
-            tryPark = 1;
-        if (gamepad1.dpad_left)
-            driveMode = true;
-        if (gamepad1.dpad_right)
-            driveMode = false;
-
         double forward = -gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
-        double rotate = gamepad1.right_stick_x;
+        double rotate = gamepad1.right_stick_x; // For movement
 
-        if (gamepad1.right_trigger > 0.5) {
-            rotate = vision.getRotate(time, tag);
-            telemetry.addData("rotation", rotate);
-        }
-
-        if (driveMode)
-            Drive.FieldDrive(forward / tryPark, strafe / tryPark, rotate / tryPark);
-        else
-            Drive.drive(forward / tryPark, strafe / tryPark, rotate / tryPark);
-
-        if (gamepad2.y)
-            launcher.spinLauncher();
-        else if (gamepad2.b)
-            launcher.stopLauncher();
         double dist = vision.getDist(tag);
-        double angle = launcher.lookUpTable.get(dist-3)[0];
-        double velocity = launcher.lookUpTable.get(dist-3)[1];
-        if(gamepad2.left_trigger > 0.5 && vision.getOffset(tag) < angleTolerance)
-        {
-            servo.setPosition(angle);
-            launcher.startLauncher(velocity,velocity-2);
+        double angle = launcher.lookUpTable.get(dist - 3)[0];
+        double velocity = launcher.lookUpTable.get(dist - 3)[1]; // For shooting
+
+        { // Gamepad 1
+
+            if (gamepad1.right_bumper)
+                tryPark = 4;
+            if (gamepad1.left_bumper)
+                tryPark = 1;
+            if (gamepad1.dpad_left)
+                driveMode = true;
+            if (gamepad1.dpad_right)
+                driveMode = false;
+
+
+            if (gamepad1.right_trigger > 0.5) {
+                rotate = vision.getRotate(time, tag);
+                telemetry.addData("rotation", rotate);
+            }
+
+            if (driveMode)
+                Drive.FieldDrive(forward / tryPark, strafe / tryPark, rotate / tryPark);
+            else
+                Drive.drive(forward / tryPark, strafe / tryPark, rotate / tryPark);
         }
-        else if(gamepad2.right_trigger_pressed) // 52cm, 0.24, 1250
-        {
-            servo.setPosition(targethood); // 0.26
-            //servo.setPosition(targethood);
-            launcher.startLauncher(targetvelocity,targetvelocity-2); //1380
+
+        { //Gamepad 2
+            if (gamepad2.y)
+                launcher.spinLauncher();
+            else if (gamepad2.b)
+                launcher.stopLauncher();
+            if (gamepad2.left_trigger > 0.5 && vision.getOffset(tag) < angleTolerance) {
+                servo.setPosition(angle);
+                launcher.startLauncher(velocity, velocity - 2);
+            } else if (gamepad2.right_trigger_pressed) // 52cm, 0.24, 1250
+            {
+                servo.setPosition(0.23); // 0.26
+                launcher.startLauncher(1220, 1220 - 2); //1380
+            }
         }
         launcher.updateState(); // CLOSE - 0.23, 1TILE - 0.26, 2TILE - 0.28
         //                         CLOSE - 1220, 1TILE - 1370, 2TILE - 1500
