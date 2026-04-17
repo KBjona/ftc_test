@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 
+import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.mechanisms.Vision;
 import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
 import org.firstinspires.ftc.teamcode.mechanisms.MecanumDrive;
@@ -19,6 +20,7 @@ public class MainTeleop extends OpMode {
     MecanumDrive Drive = new MecanumDrive();
     Launcher launcher = new Launcher();
     Vision vision = new Vision();
+    Intake intake = new Intake();
     public static double  targetvelocity = 2110.0;
     int tryPark = 1;
     private Servo servo;
@@ -69,8 +71,8 @@ public class MainTeleop extends OpMode {
         double rotate = gamepad1.right_stick_x; // For movement
 
         double dist = vision.getDist(tag);
-        double angle = launcher.lookUpTable.get(dist - 3)[0];
-        double velocity = launcher.lookUpTable.get(dist - 3)[1]; // For shooting
+        double angle = launcher.lookUpTable.get(dist - 2)[0];
+        double velocity = launcher.lookUpTable.get(dist - 2)[1]; // For shooting
 
         { // Gamepad 1
 
@@ -123,6 +125,7 @@ public class MainTeleop extends OpMode {
         telemetry.addData("dist",dist);
         telemetry.addData("angle",angle);
         telemetry.addData("velocity",velocity);
+        telemetry.addData("Intake state (1 - on), (0-off), (-1 - rev)", intake.state);
         telemetry.update();
 
         if (gamepad1.ps)
@@ -132,61 +135,3 @@ public class MainTeleop extends OpMode {
     }
 
 }
-/*
-package org.firstinspires.ftc.teamcode;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
-
-
-import org.firstinspires.ftc.teamcode.mechanisms.ArcadeDrive;
-import org.firstinspires.ftc.teamcode.mechanisms.Launcher;
-
-
-@TeleOp(name = "Main-Teleop", group = "StarterBot")
-public class MainTeleop extends OpMode {
-    ArcadeDrive Drive = new ArcadeDrive();
-    Launcher launcher = new Launcher();
-
-    private Servo servo;
-
-    @Override
-    public void init()
-    {
-        servo = hardwareMap.get(Servo.class,"hood");
-        Drive.init(hardwareMap);
-        launcher.init(hardwareMap);
-
-    }
-    @Override
-    public void loop()
-    {
-        Drive.drive(-(gamepad2.left_stick_y) , (gamepad2.right_stick_x));
-
-        if (gamepad2.y)
-            launcher.spinLauncher();
-        else if (gamepad2.b)
-            launcher.stopLauncher();
-
-        if (gamepad2.right_bumper)
-            launcher.startLauncher(1200,1160);
-        else if (gamepad2.left_bumper)
-            launcher.startLauncher(2100,2080);
-
-        if (gamepad2.right_trigger_pressed)
-            servo.setPosition(0.61);
-        servo.getPosition();
-        if (gamepad2.left_trigger_pressed)
-            servo.setPosition(0.67);
-
-
-
-        launcher.updateState();
-        telemetry.addData("Hood position", servo.getPosition());
-        telemetry.addData("Launcher state", launcher.getState());
-        telemetry.addData("Launcher velocity", launcher.getVelocity());
-        telemetry.update();
-    }
-
-}*/

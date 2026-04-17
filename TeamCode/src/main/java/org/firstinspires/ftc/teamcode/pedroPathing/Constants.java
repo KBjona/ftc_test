@@ -4,12 +4,17 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.localization.Encoder;
+import com.pedropathing.ftc.localization.constants.PinpointConstants;
 import com.pedropathing.ftc.localization.constants.TwoWheelConstants;
 import com.pedropathing.paths.PathConstraints;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
             .mass(5); //TODO fix after final robot weight
@@ -33,12 +38,22 @@ public class Constants {
                             RevHubOrientationOnRobot.UsbFacingDirection.UP
                     )
             )
-            .forwardPodY(0) // TODO check distance from center of robot to odo pods
-            .strafePodX(0)
+            .forwardPodY(1.62)// DONE check distance from center of robot to odo pods
+            .strafePodX(6.11)
             .forwardEncoderDirection(Encoder.FORWARD) // TODO check up direction by running localizationtest opmode in the tuning
             .strafeEncoderDirection(Encoder.FORWARD)
             .forwardTicksToInches(1) //TODO check up the multiplier by running the localization opmode
             .strafeTicksToInches(1);
+    /*
+    public static PinpointConstants localizerConstants = new PinpointConstants()
+            .forwardPodY(-5)
+            .strafePodX(0.5)
+            .distanceUnit(DistanceUnit.INCH)
+            .hardwareMapName("pinpoint")
+            .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
+    */ //TODO incase of changing to pinpoint remove comments from here
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
